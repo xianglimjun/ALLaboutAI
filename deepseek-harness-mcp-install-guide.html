@@ -93,7 +93,24 @@
 </ul>
 </div>
 
-<h2>Part 2 — Let DeepSeek Harness install the Packet Tracer MCP server</h2>
+<h2>Part 2 — Use Token Harbor free models in DeepSeek Harness</h2>
+
+<p>Before installing MCP tools, set up a free model API key so Harness can run agent steps without paid credits.</p>
+<ol>
+  <li>Go to <a href="https://tokenharbor.ai/">tokenharbor.ai</a> and sign in (free account, no card required).</li>
+  <li>Open the dashboard and copy your <strong>Universal Key</strong> (format: <code>thk_live_...</code>).</li>
+  <li>In DeepSeek Harness, open model/provider settings and add an OpenAI-compatible provider with:
+    <ul>
+      <li><strong>Base URL:</strong> <code>https://tokenharbor.ai/v1</code></li>
+      <li><strong>API key:</strong> your <code>thk_live_...</code> key</li>
+    </ul>
+  </li>
+  <li>Select a model ID that ends with <code>:free</code> (for example, any free model shown in Token Harbor's model list), then save and use that model in your chat session.</li>
+</ol>
+<div class="warn"><strong>Important:</strong> Token Harbor shows the full key once. Store it in your password manager and never paste it into public chats, screenshots, or repos.</div>
+<div class="note"><strong>Tip:</strong> If your client supports environment variables, store the key as <code>TOKEN_HARBOR_API_KEY</code> and reference it from settings instead of pasting plain text.</div>
+
+<h2>Part 3 — Let DeepSeek Harness install the Packet Tracer MCP server</h2>
 
 <p>The Packet Tracer MCP server lets an AI agent (Claude Code, OpenCode, Codex, Cursor, Claude Desktop, or VS Code Copilot) control Cisco Packet Tracer. DeepSeek Harness provides the agent environment; the MCP server plugs into your client.</p>
 
@@ -103,12 +120,14 @@
 <ul>
   <li><strong>Cisco Packet Tracer 8.2+</strong> must be installed (9.0 recommended). If it is not installed, download it from <a href="https://www.netacad.com/resources/lab-downloads">https://www.netacad.com/resources/lab-downloads</a> (free with a NetAcad account).</li>
   <li><strong>DeepSeek Harness</strong> must be running (desktop app, or <code>npx @deepseek-ai/dsh web</code>, or from source).</li>
+  <li><strong>Token Harbor key configured</strong> in Harness if you want to run this on free models.</li>
 </ul>
 </div>
 
 <h3>Step 0 — What to paste into DeepSeek Harness</h3>
 <p>Copy this entire block and paste it into your DeepSeek Harness chat:</p>
-<pre><code>Install the Packet Tracer MCP server for me by following the instructions at https://github.com/Mats2208/MCP-Packet-Tracer/blob/main/llms-install.md.
+<pre><code>Use my configured Token Harbor provider and select a model ID ending with :free for this task.
+Install the Packet Tracer MCP server for me by following the instructions at https://github.com/Mats2208/MCP-Packet-Tracer/blob/main/llms-install.md.
 
 Do everything in order:
 1. Check whether `uv` is installed (`uv --version`); if not, install it (macOS/Linux: curl -LsSf https://astral.sh/uv/install.sh | sh ; Windows PowerShell: powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex").
@@ -230,19 +249,21 @@ Start-Process powershell -Verb RunAs -Wait -ArgumentList "-Command", "New-Item -
 <table>
   <tr><th>#</th><th>Step</th><th>Done?</th></tr>
   <tr><td>1</td><td>DeepSeek Harness installed (desktop app, npm, or source)</td><td>[&nbsp;&nbsp;]</td></tr>
-  <tr><td>2</td><td>Cisco Packet Tracer 8.2+ (9.0 recommended) installed</td><td>[&nbsp;&nbsp;]</td></tr>
-  <tr><td>3</td><td>Pasted the Step 0 block into DeepSeek Harness chat</td><td>[&nbsp;&nbsp;]</td></tr>
-  <tr><td>4</td><td>Harness installed `uv`</td><td>[&nbsp;&nbsp;]</td></tr>
-  <tr><td>5</td><td>Harness registered the MCP server in your client</td><td>[&nbsp;&nbsp;]</td></tr>
-  <tr><td>6</td><td>Harness installed the skill</td><td>[&nbsp;&nbsp;]</td></tr>
-  <tr><td>7</td><td>Harness placed the MCP Control Center extension in PT</td><td>[&nbsp;&nbsp;]</td></tr>
-  <tr><td>8</td><td>You clicked Yes to enable the module in Packet Tracer</td><td>[&nbsp;&nbsp;]</td></tr>
-  <tr><td>9</td><td>Session restarted; `pt_bridge_status` reports connected</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>2</td><td>Token Harbor API key added; a <code>:free</code> model is selected in Harness</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>3</td><td>Cisco Packet Tracer 8.2+ (9.0 recommended) installed</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>4</td><td>Pasted the Step 0 block into DeepSeek Harness chat</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>5</td><td>Harness installed `uv`</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>6</td><td>Harness registered the MCP server in your client</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>7</td><td>Harness installed the skill</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>8</td><td>Harness placed the MCP Control Center extension in PT</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>9</td><td>You clicked Yes to enable the module in Packet Tracer</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>10</td><td>Session restarted; <code>pt_bridge_status</code> reports connected</td><td>[&nbsp;&nbsp;]</td></tr>
 </table>
 
 <div class="footer">
 Sources:<br>
 • DeepSeek Harness: <a href="https://www.deepseek.com/en/harness/">https://www.deepseek.com/en/harness/</a> · <a href="https://github.com/deepseek-ai/deepseek-harness">github.com/deepseek-ai/deepseek-harness</a><br>
+• Token Harbor quickstart: <a href="https://tokenharbor.ai/docs/getting-started/quickstart">tokenharbor.ai/docs/getting-started/quickstart</a><br>
 • Packet Tracer MCP install: <a href="https://github.com/Mats2208/MCP-Packet-Tracer/blob/main/llms-install.md">github.com/Mats2208/MCP-Packet-Tracer/blob/main/llms-install.md</a><br>
 Generated for kanban task t_6748b4a7.
 </div>
