@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepSeek Harness + Packet Tracer MCP — Install Guide</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #222; max-width: 900px; margin: 0 auto; padding: 24px; background: #fafafa; }
+  h1 { font-size: 24px; border-bottom: 2px solid #2563eb; padding-bottom: 8px; margin-bottom: 16px; }
+  h2 { font-size: 18px; margin-top: 24px; margin-bottom: 10px; color: #1e40af; }
+  h3 { font-size: 15px; margin-top: 16px; margin-bottom: 6px; color: #374151; }
+  p { margin: 8px 0; }
+  ul, ol { margin: 8px 0 8px 24px; padding: 0; }
+  li { margin: 5px 0; }
+  .callout { background: #eff6ff; border-left: 4px solid #2563eb; padding: 10px 14px; margin: 12px 0; border-radius: 0 6px 6px 0; }
+  .warn { background: #fef3c7; border-left: 4px solid #d97706; padding: 10px 14px; margin: 12px 0; border-radius: 0 6px 6px 0; }
+  .note { background: #f1f5f9; border-left: 4px solid #64748b; padding: 10px 14px; margin: 12px 0; border-radius: 0 6px 6px 0; }
+  pre { background: #1e1e1e; color: #d4d4d4; padding: 10px 14px; border-radius: 6px; overflow-x: auto; margin: 8px 0; }
+  code { background: #e5e7eb; padding: 1px 6px; border-radius: 4px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.9em; }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+  code.block, .cmd { display: block; background: #1e1e1e; color: #d4d4d4; padding: 10px 14px; border-radius: 6px; margin: 8px 0; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.9em; white-space: pre-wrap; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+  th, td { border: 1px solid #cbd5e1; padding: 6px 10px; text-align: left; font-size: 0.9em; }
+  th { background: #e2e8f0; }
+  .platform { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.85em; font-weight: 600; margin-right: 6px; }
+  .mac { background: #e2e8f0; color: #1e40af; border: 1px solid #94a3b8; }
+  .win { background: #fef3c7; color: #92400e; border: 1px solid #d97706; }
+  .lin { background: #ecfdf5; color: #14532d; border: 1px solid #10b981; }
+  .step { margin-bottom: 22px; }
+  .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #cbd5e1; font-size: 0.85em; color: #64748b; }
+  .platform-tabs { display: flex; gap: 6px; margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<h1>DeepSeek Harness + Packet Tracer MCP — Install Guide</h1>
+
+<p>This guide covers two things:</p>
+<ol>
+  <li><strong>Installing DeepSeek Harness</strong> (from <a href="https://www.deepseek.com/en/harness/">deepseek.com/en/harness</a>)</li>
+  <li><strong>Using DeepSeek Harness to install the Packet Tracer MCP server</strong> — you copy-paste the llms-install instructions into DeepSeek Harness chat, and Harness installs <code>uv</code> and the MCP server for you (from <a href="https://github.com/Mats2208/MCP-Packet-Tracer/blob/main/llms-install.md">Mats2208/MCP-Packet-Tracer/llms-install.md</a>)</li>
+</ol>
+
+<div class="callout"><strong>What is DeepSeek Harness?</strong> DeepSeek Harness (<code>dsh</code>) is an open-source agent harness from DeepSeek AI, built on Cordis's "everything is a plugin" architecture. It runs as a desktop app or as a web UI from code. It is currently in public preview worldwide.</div>
+
+<h2>Part 1 — Install DeepSeek Harness</h2>
+
+<h3>Option A: Desktop app (easiest)</h3>
+<ol>
+  <li>Go to <a href="https://www.deepseek.com/en/download/">https://www.deepseek.com/en/download/</a>.</li>
+  <li>Click <strong>Download Desktop</strong>.</li>
+  <li>Install the downloaded package for your OS.</li>
+  <li>Launch DeepSeek Harness and sign in.</li>
+</ol>
+
+<h3>Option B: Run from npm (Web UI)</h3>
+<div class="callout"><strong>Prerequisite:</strong> Install Node.js first.</div>
+<ol>
+  <li>Open a terminal.</li>
+  <li>Run: <span class="cmd">npx @deepseek-ai/dsh web</span></li>
+  <li>The Web UI starts at <code>http://127.0.0.1:3080</code> by default and opens in your default browser.</li>
+  <li>To run without opening a browser, pass <code>--no-open</code>.</li>
+</ol>
+
+<h3>Option C: Run from source</h3>
+<ol>
+  <li>Clone the repository: <span class="cmd">git clone https://github.com/deepseek-ai/deepseek-harness.git</span></li>
+  <li>Enter the directory: <span class="cmd">cd deepseek-harness</span></li>
+  <li>Install dependencies: <span class="cmd">pnpm install</span></li>
+  <li>Build artifacts: <span class="cmd">pnpm run build</span></li>
+  <li>Start the web UI: <span class="cmd">pnpm dsh web</span></li>
+</ol>
+<p><code>pnpm run build</code> prepares the repository artifacts; <code>pnpm dsh web</code> uses those built artifacts without rebuilding.</p>
+
+<div class="warn"><strong>Developer preview notice:</strong> DeepSeek Harness is in developer preview and iterating rapidly — there will be compatibility-breaking changes. Review the safety notice in the repository before running from source.</div>
+
+<h3>DeepSeek Harness capabilities</h3>
+<ul>
+  <li>Everyday work — organize files, analyze data, draft docs, create slides</li>
+  <li>Coding — explore repos, fix bugs, build features, run tests</li>
+  <li>Research — find information, verify facts, cite sources</li>
+  <li>Background tasks — run scripts, batch-process files, track progress</li>
+  <li>Plugins — add or build plugins to fit your workflow</li>
+</ul>
+
+<div class="callout"><strong>Community &amp; docs:</strong>
+<ul>
+  <li>Documentation: <a href="https://deepseek-harness.github.io/deepseek-harness/en/guide/quickstart">deepseek-harness.github.io/deepseek-harness</a></li>
+  <li>GitHub Discussions: feedback and bug reports</li>
+  <li>Discord community: <a href="https://discord.gg/4MrtZUhpxg">discord.gg/4MrtZUhpxg</a></li>
+  <li>Plugin topic: <code>dsh-plugin</code> on GitHub</li>
+</ul>
+</div>
+
+<h2>Part 2 — Let DeepSeek Harness install the Packet Tracer MCP server</h2>
+
+<p>The Packet Tracer MCP server lets an AI agent (Claude Code, OpenCode, Codex, Cursor, Claude Desktop, or VS Code Copilot) control Cisco Packet Tracer. DeepSeek Harness provides the agent environment; the MCP server plugs into your client.</p>
+
+<div class="callout"><strong>The short version:</strong> once DeepSeek Harness is running, copy the block in <em>Step 0 — What to paste into DeepSeek Harness</em> below and paste it into the Harness chat. Harness will read the llms-install instructions and carry out every step — installing <code>uv</code>, registering the MCP server in your client, installing the skill, and placing the Packet Tracer extension — so you don't have to run anything by hand.</p></div>
+
+<div class="warn"><strong>Prerequisites before you paste:</strong>
+<ul>
+  <li><strong>Cisco Packet Tracer 8.2+</strong> must be installed (9.0 recommended). If it is not installed, download it from <a href="https://www.netacad.com/resources/lab-downloads">https://www.netacad.com/resources/lab-downloads</a> (free with a NetAcad account).</li>
+  <li><strong>DeepSeek Harness</strong> must be running (desktop app, or <code>npx @deepseek-ai/dsh web</code>, or from source).</li>
+</ul>
+</div>
+
+<h3>Step 0 — What to paste into DeepSeek Harness</h3>
+<p>Copy this entire block and paste it into your DeepSeek Harness chat:</p>
+<pre><code>Install the Packet Tracer MCP server for me by following the instructions at https://github.com/Mats2208/MCP-Packet-Tracer/blob/main/llms-install.md.
+
+Do everything in order:
+1. Check whether `uv` is installed (`uv --version`); if not, install it (macOS/Linux: curl -LsSf https://astral.sh/uv/install.sh | sh ; Windows PowerShell: powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex").
+2. Register the MCP server in my agent client with the command `uvx packet-tracer-mcp --stdio` (on Windows: `uvx --from "packet-tracer-mcp[ui]" packet-tracer-mcp --stdio`). I am using [Claude Code / OpenCode / Codex / Cursor / Claude Desktop / VS Code] — pick the matching registration from llms-install.md step 2.
+3. Install the skill with `uvx packet-tracer-mcp install-skill` into my user-level skills folder.
+4. Download the MCP Control Center extension (.pts) from the MCP-Packet-Tracer releases and place it in Packet Tracer's extensions folder (per-platform paths from llms-install.md step 4).
+5. When Packet Tracer asks to enable the new script module "MCP-Control-Center", I will click Yes myself — that is the only step I do by hand.
+6. Restart my agent session and verify with `pt_bridge_status` that the bridge is active and connected.
+
+Report back after each step, and ask me before doing anything system-wide.</code></pre>
+
+<div class="note"><strong>Why paste this instead of doing it yourself:</strong> DeepSeek Harness is an agent — it reads the llms-install.md instructions, installs <code>uv</code> (which downloads a suitable Python by itself, so you never touch the system Python), registers the MCP server, installs the skill, and places the extension. The only thing Harness cannot do for you is click "Yes" in Packet Tracer's enable dialog (Step 5) — that requires a real user.</div>
+
+<h3>What DeepSeek Harness will do (reference — copied from llms-install.md)</h3>
+<p>These are the steps Harness performs on your behalf. You can watch them in the Harness chat.</p>
+
+<h4>Step 1 — Make sure <code>uv</code> is installed</h4>
+<p>The MCP server runs through <code>uv</code>, which downloads a suitable Python by itself. Nothing gets installed into the system Python.</p>
+<p>Check with <span class="cmd">uv --version</span>. If it is missing, install it:</p>
+<div class="platform-tabs">
+  <span class="platform mac">macOS / Linux</span>
+  <span class="cmd">curl -LsSf https://astral.sh/uv/install.sh | sh</span>
+</div>
+<div class="platform-tabs">
+  <span class="platform win">Windows (PowerShell)</span>
+  <span class="cmd">powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"</span>
+</div>
+<div class="note">A shell opened before the install will not see <code>uvx</code> yet. If <code>uvx</code> is "not found" right after installing, use its full path: <code>~/.local/bin/uvx</code> (macOS/Linux) or <code>%USERPROFILE%\.local\bin\uvx.exe</code> (Windows).</div>
+
+<h4>Step 2 — Register the MCP server in your client</h4>
+<p>The server command is <code>uvx packet-tracer-mcp --stdio</code>.</p>
+<div class="warn"><strong>Windows only:</strong> use <code>uvx --from "packet-tracer-mcp[ui]" packet-tracer-mcp --stdio</code> instead — the <code>[ui]</code> extra lets the MCP open Packet Tracer's device windows and capture them (UI mode exists only on Windows). Put the same <code>--from "packet-tracer-mcp[ui]"</code> in front of <code>packet-tracer-mcp</code> in every command and JSON <code>args</code> below.</div>
+<table>
+  <tr><th>Client</th><th>Registration command / config</th></tr>
+  <tr>
+    <td>Claude Code</td>
+    <td><span class="cmd">claude mcp add --scope user --transport stdio packet-tracer -- uvx packet-tracer-mcp --stdio</span><br>
+    PowerShell (Windows): <span class="cmd">claude mcp add --scope user --transport stdio packet-tracer "--" uvx --from "packet-tracer-mcp[ui]" packet-tracer-mcp --stdio</span><br>
+    Check: <span class="cmd">claude mcp list</span> &rarr; <code>packet-tracer: … ✓ Connected</code></td>
+  </tr>
+  <tr>
+    <td>Codex</td>
+    <td><span class="cmd">codex mcp add packet-tracer -- uvx packet-tracer-mcp --stdio</span></td>
+  </tr>
+  <tr>
+    <td>OpenCode</td>
+    <td>Add to <code>~/.config/opencode/opencode.json</code> (merge, do not overwrite other keys):<br>
+    <pre><code>{ "mcp": { "packet-tracer": { "type": "local", "command": ["uvx", "packet-tracer-mcp", "--stdio"], "enabled": true } } }</code></pre></td>
+  </tr>
+  <tr>
+    <td>Cursor / Claude Desktop / any JSON client</td>
+    <td>Add to <code>~/.cursor/mcp.json</code> (Cursor) or your client's MCP config:<br>
+    <pre><code>{ "mcpServers": { "packet-tracer": { "command": "uvx", "args": ["packet-tracer-mcp", "--stdio"] } } }</code></pre></td>
+  </tr>
+  <tr>
+    <td>VS Code (Copilot)</td>
+    <td><code>.vscode/mcp.json</td>
+    <td><pre><code>{ "servers": { "packet-tracer": { "type": "stdio", "command": "uvx", "args": ["packet-tracer-mcp", "--stdio"] } } }</code></pre></td>
+  </tr>
+</table>
+<div class="note">If the client cannot find <code>uvx</code>, put its full path (from Step 1) in <code>command</code>.</div>
+
+<h4>Step 3 — Install the skill (required)</h4>
+<p>Without the skill the MCP works halfway — you would guess device models, port names and Script-Engine methods instead of discovering them. Install it into <strong>your own</strong> skills folder.</p>
+<ul>
+  <li><strong>Claude Code and OpenCode:</strong> <span class="cmd">uvx packet-tracer-mcp install-skill</span> (&rarr; <code>~/.claude/skills/packet-tracer</code>)</li>
+  <li><strong>Codex:</strong> <span class="cmd">uvx packet-tracer-mcp install-skill --dest ~/.agents/skills</span></li>
+  <li><strong>Other agents:</strong> <span class="cmd">uvx packet-tracer-mcp install-skill --dest &lt;your user-level skills folder&gt;</span></li>
+</ul>
+
+<h4>Step 4 — Put the Packet Tracer extension where PT finds it</h4>
+<p>Packet Tracer scans its own <code>extensions</code> folder when it starts and asks the user to enable any new script module there. Copy this project's extension (<strong>MCP Control Center</strong>, not PTBuilder) into that folder, inside a subfolder of its own.</p>
+
+<h5>macOS</h5>
+<div class="platform-tabs"><span class="platform mac">macOS</span></div>
+<pre><code>APP="$(ls -d /Applications/Cisco\\ Packet\\ Tracer*/Cisco\\ Packet\\ Tracer*.app | tail -1)"
+mkdir -p "$APP/Contents/extensions/MCPControlCenter"
+curl -L -o "$APP/Contents/extensions/MCPControlCenter/MCPControlCenter.pts" \\
+    https://github.com/Mats2208/MCP-Packet-Tracer/releases/latest/download/MCP-Control-Center.pts</code></pre>
+<div class="callout"><strong>Verified:</strong> macOS, no admin needed.</div>
+
+<h5>Windows</h5>
+<div class="platform-tabs"><span class="platform win">Windows</span></div>
+<p>The folder is <code>C:\Program Files\Cisco Packet Tracer &lt;version&gt;\extensions\</code>, which needs administrator rights. Windows will ask for permission once; then run from PowerShell (adjust the version folder you find):</p>
+<pre><code>$pt = (Get-ChildItem "C:\Program Files" -Directory -Filter "Cisco Packet Tracer*" | Select-Object -Last 1).FullName
+$tmp = "$env:TEMP\MCPControlCenter.pts"
+Invoke-WebRequest -OutFile $tmp https://github.com/Mats2208/MCP-Packet-Tracer/releases/latest/download/MCP-Control-Center.pts
+Start-Process powershell -Verb RunAs -Wait -ArgumentList "-Command", "New-Item -ItemType Directory -Force '$pt\extensions\MCPControlCenter' | Out-Null; Copy-Item '$tmp' '$pt\extensions\MCPControlCenter\MCPControlCenter.pts' -Force"</code></pre>
+
+<h5>Linux</h5>
+<div class="platform-tabs"><span class="platform lin">Linux</span></div>
+<p>PT is a single AppImage in <code>/opt/pt</code>, so there is no <code>extensions</code> folder to copy into.</p>
+<ol>
+  <li>Download the <code>.pts</code> to the user's Downloads folder.</li>
+  <li>PT must start at least once: the user accepts the EULA by running <span class="cmd">packettracer</span> in a terminal (from the menu no window appears).</li>
+  <li>On Ubuntu 26.04 it also needs <span class="cmd">sudo apt install libopengl0 libts0t64</span> (ask the user first).</li>
+</ol>
+<div class="warn"><strong>Verified:</strong> Linux on Ubuntu 26.04 + PT 9.0.1.</div>
+<div class="note"><strong>Fallback:</strong> If copying is not possible, download the file to the user's Downloads folder and have them add it with <strong>Extensions &rarr; Scripting &rarr; Configure PT Script Modules &rarr; Add…</strong>.</div>
+
+<h4>Step 5 — The user enables it (one click — the only step Harness cannot do)</h4>
+<p>The <strong>only</strong> thing you do by hand is clicking <strong>Yes</strong> when Packet Tracer asks to enable the extension.</p>
+<ol>
+  <li>Open (or restart) Cisco Packet Tracer. PT only looks for new modules when it starts, so if it was already open it must be closed completely first.</li>
+  <li>A dialog says <em>"Cisco Packet Tracer has detected a new script module. Do you want to enable this script module?"</em> showing <strong>Name: MCP-Control-Center</strong> by Mateo Andres Soto Gareca — click <strong>Yes</strong>.</li>
+  <li>The MCP Control Center window opens and connects by itself (on later starts: <strong>Extensions &rarr; MCP BUILDER</strong>).</li>
+  <li>Verified on Windows 11 and macOS with PT 9.0.1. Wait until you see it connected.</li>
+</ol>
+
+<h4>Step 6 — Restart and verify</h4>
+<p>MCP servers and skills load when the session starts: restart your agent session (in Claude Code: exit and run <code>claude</code> again). Then, in the new session:</p>
+<ol>
+  <li>Call <code>pt_bridge_status</code> — it must say the bridge is active and connected.</li>
+  <li>Run a first test: <em>"Create a network with 1 switch and 2 PCs, deploy it to Packet Tracer and ping between the PCs."</em></li>
+</ol>
+<div class="note">If <code>pt_bridge_status</code> says Packet Tracer is not connected: check that the MCP BUILDER window is open, close and reopen it once (the token is created the first time the server runs), and call it again.</div>
+
+<h2>Summary checklist</h2>
+<table>
+  <tr><th>#</th><th>Step</th><th>Done?</th></tr>
+  <tr><td>1</td><td>DeepSeek Harness installed (desktop app, npm, or source)</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>2</td><td>Cisco Packet Tracer 8.2+ (9.0 recommended) installed</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>3</td><td>Pasted the Step 0 block into DeepSeek Harness chat</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>4</td><td>Harness installed `uv`</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>5</td><td>Harness registered the MCP server in your client</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>6</td><td>Harness installed the skill</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>7</td><td>Harness placed the MCP Control Center extension in PT</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>8</td><td>You clicked Yes to enable the module in Packet Tracer</td><td>[&nbsp;&nbsp;]</td></tr>
+  <tr><td>9</td><td>Session restarted; `pt_bridge_status` reports connected</td><td>[&nbsp;&nbsp;]</td></tr>
+</table>
+
+<div class="footer">
+Sources:<br>
+• DeepSeek Harness: <a href="https://www.deepseek.com/en/harness/">https://www.deepseek.com/en/harness/</a> · <a href="https://github.com/deepseek-ai/deepseek-harness">github.com/deepseek-ai/deepseek-harness</a><br>
+• Packet Tracer MCP install: <a href="https://github.com/Mats2208/MCP-Packet-Tracer/blob/main/llms-install.md">github.com/Mats2208/MCP-Packet-Tracer/blob/main/llms-install.md</a><br>
+Generated for kanban task t_6748b4a7.
+</div>
+
+</body>
+</html>
